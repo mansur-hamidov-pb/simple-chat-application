@@ -31,12 +31,11 @@ body {
     color: #f00;
     padding: 2px 10px;
 }
-.message {
-    border-radius: 4px;
-}
-.received-message {
-    background: aqua;
-}
-.sended-message {
-    background: azure;
+.chat-screen {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: space-between;
+    background-image: url('./assets/img/background.png');
+    background-size: contain;
 }

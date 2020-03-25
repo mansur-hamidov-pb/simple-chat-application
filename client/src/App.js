@@ -6,21 +6,17 @@ import './styles.css';
 import { events } from './events';
 import { MessagesList } from './components/MessagesList';
 import { Header } from './components/Header';
+import { MessageInput } from './components/MessageInput';
 
-const socketUrl = 'http://192.168.1.113:8080';
+const socketUrl = 'http://192.168.1.119:8080';
 
 function App() {
+    const [users, setUsers] = React.useState({});
     const [socket, setSocket] = React.useState(null);
     const [error, setError] = React.useState(null);
     const [user, setUser] = React.useState(null);
     const [message, setMessage] = React.useState('');
     const [messages, updateMessages] = React.useState([]);
-
-    const temporaryUsers = [
-        { userName: "Mansur" },
-        { userName: "Hamdulla "},
-        { userName: "Misha" }
-    ];
 
     React.useEffect(() => {
         const socket = io(socketUrl);
@@ -28,7 +24,9 @@ function App() {
 
         socket.on('connect', () => console.log('Connection to socket server established'));
 
-        socket.on(events.MESSAGE, (data) => updateMessages(data))
+        socket.on(events.MESSAGE, updateMessages);
+
+        socket.on(events.USERS, setUsers)
 
     }, []);
 
@@ -38,7 +36,6 @@ function App() {
                 setError("User exists")
             } else {
                 setUser(response.user);
-                console.log(response.user);
                 setError(null);
             }
         });
@@ -46,24 +43,21 @@ function App() {
 
     const sendMessage = (event) => {
         event.preventDefault();
-        const _message = { sender: user.id, text: message };
-        socket.emit(events.MESSAGE, _message);
-        setMessage('')
+        if (message.length) {
+            const _message = { sender: user.id, text: message };
+            socket.emit(events.MESSAGE, _message);
+            setMessage('');
+        }
     }
 
 
     return (
         <div className="App">
-            {!user ? (
-                <form onSubmit={sendMessage}>
-                    <Header users={temporaryUsers} groupName="Family"/>
-                    <MessagesList messages={messages} user={user}/>
-                    <input
-                        type="text"
-                        value={message}
-                        onChange={e => setMessage(e.target.value)}
-                        placeholder="message"
-                    />
+            {user ? (
+                <form onSubmit={sendMessage} className="chat-screen">
+                    <Header users={users} groupName="Family"/>
+                    <MessagesList messages={messages} user={user} users={users}/>
+                    <MessageInput onChange={e => setMessage(e.target.value)} value={message} onSubmit={sendMessage}/>
                 </form> 
             ) : (
                 <NewUser error={error} verifyUser={verifyUser}/>

@@ -4,7 +4,7 @@ import groupAvatar from '../assets/img/group.jpeg';
 import "./Header.css";
 
 export const Header = ({ users, groupName }) => {
-    const groupUsers = users.map(user => user.userName).join(", ");
+    const groupUsers = Object.keys(users).map(key => users[key].username).join(", ");
 
     return (
         <div className="header">

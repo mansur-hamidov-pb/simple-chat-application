@@ -1,0 +1,67 @@
+.messages-container {
+    height: calc(100vh - 140px);
+    overflow-y: scroll;
+}
+.message-outer {
+    display: flex;
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    align-items: flex-start;
+}
+.message-outer.sended-message {
+    justify-content: flex-end;
+}
+.message-outer.received-message {
+    justify-content: flex-start;
+}
+.message {
+    border-radius: 4px;
+    max-width: 70%;
+    padding: 5px;
+    padding-right: 60px;
+    -webkit-box-shadow: 0px 0px 9px 0px rgba(179,179,179,1);
+    -moz-box-shadow: 0px 0px 9px 0px rgba(179,179,179,1);
+    box-shadow: 0px 0px 9px 0px rgba(179,179,179,1);
+    position: relative;
+}
+.received-message .message {
+    background: #FFF;
+}
+.received-message::before {
+    content: ' ';
+    display: block;
+    position: relative;
+    left: 3px;
+    border-bottom: 12px solid transparent;
+    border-right: 14px solid white;
+}
+.sended-message .message {
+    background: #EAFCCC;
+}
+.sended-message::after {
+    content: ' ';
+    display: block;
+    position: relative;
+    right: 3px;
+    border-bottom: 12px solid transparent;
+    border-left: 14px solid #EAFCCC;
+}
+.message-sender {
+    color: #78AFAE;
+    font-size: 15px;
+    font-weight: 500;
+    padding-bottom: 4px;
+}
+.message-time {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    font-size: 12px;
+    color: #999;
+}
+.status-icon {
+    font-size: 16px;
+    position: relative;
+    bottom: 1px;
+}
