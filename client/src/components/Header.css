@@ -1,0 +1,32 @@
+.header {
+    background-color: #00897A;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    color: white;
+}
+.header-back-action {
+    color: white;
+    border: 0;
+    background: none;
+    font-size: 22px;
+}
+.header-group-avatar {
+    height: 36px;
+    width: 36px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.header-group-info {
+    height: 100%;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    box-sizing: border-box;
+}
+.group-name {
+    font-weight: 600;
+    font-size: 18px;
+}
+.group-users {
+    font-size: 13px;
+}
