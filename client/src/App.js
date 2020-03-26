@@ -86,7 +86,7 @@ function App() {
         <div className="App">
             {user ? (
                 <form onSubmit={sendMessage} className="chat-screen">
-                    <Header users={users} typingUsers={typingUsers.map(u => users[u].username).filter(u => u !== user.id)} groupName="Family"/>
+                    <Header users={users} typingUsers={typingUsers.filter(u => u !== user.id).map(u => users[u].username)} groupName="Family"/>
                     <MessagesList messages={messages} user={user} users={users}/>
                     <MessageInput onKeyPress={handleKeyPress} onChange={e => setMessage(e.target.value)} value={message} onSubmit={sendMessage}/>
                 </form> 
