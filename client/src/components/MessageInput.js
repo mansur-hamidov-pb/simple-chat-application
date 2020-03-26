@@ -3,16 +3,11 @@ import React from 'react';
 import "./MessageInput.css";
 import { MdSend } from 'react-icons/lib/md';
 
-const handleEnterPress = (event, callback) => {
-    if (event.charCode === 13) {
-        callback(event);
-    }
-}
-
 export const MessageInput = ({
     value,
     onChange,
-    onSubmit
+    onSubmit,
+    onKeyPress
 }) => (
     <div className="message-box">
         <div className="message-box-input">
@@ -20,7 +15,7 @@ export const MessageInput = ({
                 value={value}
                 onChange={onChange}
                 placeholder="Type a message"
-                onKeyPress={e => handleEnterPress(e, onSubmit)}
+                onKeyDown={onKeyPress}
             />
         </div>
         <button onClick={onSubmit} className="message-box-send">

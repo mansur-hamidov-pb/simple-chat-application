@@ -17,6 +17,8 @@ function App() {
     const [user, setUser] = React.useState(null);
     const [message, setMessage] = React.useState('');
     const [messages, updateMessages] = React.useState([]);
+    const [typingUsers, setTypingUsers] = React.useState([]);
+    let timeout = null;
 
     React.useEffect(() => {
         const socket = io(socketUrl);
@@ -26,7 +28,15 @@ function App() {
 
         socket.on(events.MESSAGE, updateMessages);
 
-        socket.on(events.USERS, setUsers)
+        socket.on(events.USERS, setUsers);
+
+        socket.on(events.TYPING, ({ userId, isTyping }) => {
+            if (isTyping) {
+                setTypingUsers(Array.from(new Set([...typingUsers, userId])))
+            } else {
+                setTypingUsers(typingUsers.filter(u => u !== userId));
+            }
+        });
 
     }, []);
 
@@ -50,14 +60,35 @@ function App() {
         }
     }
 
+    const handleKeyPress = (event) => {
+        if (event.charCode === 13) {
+            sendMessage(event);
+        } else {
+            if (timeout) {
+                clearTimeout(timeout);
+                timeout = null;
+            };
+            socket.emit(events.TYPING, {
+                userId: user.id,
+                isTyping: true
+            });
+
+            timeout = setTimeout(() => {
+                socket.emit(events.TYPING, {
+                    userId: user.id,
+                    isTyping: false
+                })
+            }, 3000);
+        }
+    }
 
     return (
         <div className="App">
             {user ? (
                 <form onSubmit={sendMessage} className="chat-screen">
-                    <Header users={users} groupName="Family"/>
+                    <Header users={users} typingUsers={typingUsers.map(u => users[u].username).filter(u => u !== user.id)} groupName="Family"/>
                     <MessagesList messages={messages} user={user} users={users}/>
-                    <MessageInput onChange={e => setMessage(e.target.value)} value={message} onSubmit={sendMessage}/>
+                    <MessageInput onKeyPress={handleKeyPress} onChange={e => setMessage(e.target.value)} value={message} onSubmit={sendMessage}/>
                 </form> 
             ) : (
                 <NewUser error={error} verifyUser={verifyUser}/>
